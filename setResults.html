@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Duval</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+     integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="main.css">
+  
+  <link rel = "stylesheet"
+        type = "text/css" href="jquery-ui-1.10.3.custom.css" >
+		
+  <script type = "text/javascript"
+          src = "jquery-1.9.1.js"></script>
+  <script type = "text/javascript"
+          src = "jquery-ui-1.10.3.custom.min.js"></script>
+		 
+  <script type = "text/javascript">
+  
+
+    $(init);
+	
+    function init(){
+      $("h1").addClass("ui-widget-header");
+	  $("#tabs").tabs();
+      $('#playDatePicker').datepicker({dateFormat: 'yy-mm-dd'});
+	  
+      $("#slider").slider()
+      .bind("slide", reportSlider);
+      $("#selectable").selectable();
+      $("#sortable").sortable();
+      $("#dialog").dialog();
+      //initially close dialog
+      $("#dialog").dialog("close");
+    } // end init 
+  
+  </script>
+<style>
+
+.dropbtn {
+    background-color: #3498DB;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #2980B9;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown a:hover {background-color: #ddd;}
+
+.show {display: block;}
+</style>
+  
+</head>
+<body>
+<header class="container">
+<div id="wrapper">
+
+<nav id="nav">
+	<ul id="navigation">
+		<li><a href="indexProcess.php">Login</a></li>
+		<li><a href="#">Member Info &raquo;</a>
+			<ul>
+				<li><a href="members.php">MemberRoster</a></li>
+				<li><a href="mbrProfile.php">MemberProfile</a></li>
+				<li><a href="availability.php">MemberAvailability</a></li>
+				<li><a href="groupAvailability.html">GroupAvailability</a></li>
+				<li><a href="mbrRanking.php">Tennis Rankings</a></li>
+				<li><a href="sumResults.html">MemberStats</a></li>				
+			</ul>
+		</li>
+		<li><a href="#">Court Info &raquo;</a>
+			<ul>
+				<li><a href="facilities.php">Facilities</a></li>
+				<li><a href="facility.php">CourtAvailability</a></li>
+				<li><a href="assignments.html">CourtAssignments</a></li>				
+			</ul>				
+		</li>
+		<li><a href="#">Play Results &raquo;</a>
+			<ul>
+				<li><a href="setResults.html">ResultsEntry</a></li>
+				<li><a href="sumResults.html">ResultsSummary</a></li>				
+			</ul>				
+		</li>
+		<li><a href="changeMonth.php">Change Month</a></li>
+		<li><a href="sendEmail.php">Format Email</a></li>
+		<li><a href="help.php">Help</a></li><br>
+	</ul>
+</nav>
+
+</div><!--end wrapper-->
+</header>
+  <div class = "member"> 
+  <style type = "text/css">
+  
+          fieldset {
+            width: 600px;
+            background-color: #eeeeee;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 5px 5px 5px gray;
+          }
+		  
+          label {
+            float: left;
+            clear: left;
+            width: 250px;
+            text-align: right;
+            padding-right: 1em;
+          }
+                   
+          input {
+            float: left;
+          }
+		  
+		  select {
+			  float:left;
+		  }
+          
+          :required {
+            border: 1px solid red;
+          }
+          
+          :invalid {
+            color: white;
+            background-color: red;
+          }
+          
+          button {
+		    text-align: center;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            clear: both;
+          }
+		  
+		  p {
+			margin-left: 100px;
+			text-align: center;
+		  }
+		  
+		  h1 {
+			margin-left: 100px;
+            margin-right:100px;
+			text-align: center;
+		  }
+		  
+		  #submit {
+			background-color: lightyellow; 
+		  }
+  </style>
+  
+	<br><br><h1> Play Results </h1>  
+ 
+	
+    <form action = "setResults.php" method= "post">
+      <fieldset> <br>
+
+		<label>Play Date</label>
+        <input type = "text"
+             id = "playDatePicker" placeholder="Press here for a calendar" name="playDate" value = "0000/00/00" readonly/> 			 
+		 			 
+        <input type="submit" id = "submit" value = "Continue"/> <br>
+		
+      </fieldset>
+    </form>
+  </div>
+
+ 
+</body>
+</html>

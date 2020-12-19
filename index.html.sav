@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Duval</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="bootstrap.css">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="main.css"> 
+
+</head>
+<body>
+<header class="container">
+<div id="wrapper">
+
+<nav id="nav">
+	<ul id="navigation">
+		<li><a href="index.html">Login</a></li>
+		<li><a href="#">Member Info &raquo;</a>
+			<ul>
+				<li><a href="members.php">MemberRoster</a></li>
+				<li><a href="mbrProfile.php">MemberProfile</a></li>
+				<li><a href="availability.php">MemberAvailability</a></li>
+				<li><a href="sumResults.html">MemberStats</a></li>				
+			</ul>
+		</li>
+		<li><a href="#">Court Info &raquo;</a>
+			<ul>
+				<li><a href="courtAvailability.html">CourtAvailability</a></li>
+				<li><a href="assignments.html">CourtAssignments</a></li>				
+			</ul>				
+		</li>
+		<li><a href="#">Play Results &raquo;</a>
+			<ul>
+				<li><a href="setResults.html">ResultsEntry</a></li>
+				<li><a href="sumResults.html">ResultsSummary</a></li>				
+			</ul>				
+		</li>
+		<li><a href="changeMonth.php">Change Month</a></li>
+		<li><a href="sendEmail.php">Format Email</a></li>
+		<li><a href="#">Help &raquo;</a>
+		    <ul>
+				<li><a href="help.php">User Manual</a></li>
+				<li><a href="settings.php">First Page Settings</a></li>
+			</ul>
+		</li>
+	</ul>
+</nav>
+
+</div><!--end wrapper-->
+</header>
+<section class="jumbotron">
+  <div class="container">
+    <div class="row text-center">
+
+      <br><h2>The Duval Group</h2><br>
+      <h3>Moderated by James Lush and Dick Madler</h3><br>
+	
+      <form action="indexProcess.php" method= "post">
+      <h4><input class="btn btn-primary" type = "text" autofocus
+	                                     id = "mbrID"
+										 name = "mbrID"
+										 placeholder="Member ID" 
+										 pattern="[A-Za-z0-9/]{1,20}" /></h4>	
+<!-- security disabled										 
+     <h4><input class="btn btn-primary" type = "text"
+	                                     value = "password"
+	                                     id = "password" 
+										 name = "password"										 
+										 placeholder="Password"</h4> 
+-->
+	  <h4><input class="btn btn-primary" type="submit" value = "Submit"/></h4>
+	</form>
+	
+    </div>
+  </div>
+</section>
+
+<section class="container">
+ <div class="row">   
+   <figure class="col-sm-6">
+    <p>Tennis League</p>
+    <img src="court.jpg" alt= "court photo"/>
+    </figure>
+   
+    <figure class="col-sm-6">
+     <p>Special Events</p>
+     <img src = "cody.jpg" alt= "restaurant photo"/>
+    </figure> 
+ </div>
+</section>
+  
+  <footer class="container">
+  <div class="row">
+    <p class="col-sm-4">&copy; 2017 Site design by jcerullo@yahoo.com</p>
+    <ul class="col-sm-8">
+      
+      <li class="col-sm-1">
+       <img src="https://s3.amazonaws.com/codecademy-content/projects/make-a-website/lesson-4/twitter.svg">
+      </li>
+      
+     <li class="col-sm-1"> 
+       <img src="https://s3.amazonaws.com/codecademy-content/projects/make-a-website/lesson-4/facebook.svg">
+      </li>
+      
+     <li class="col-sm-1"> 
+       <img src="https://s3.amazonaws.com/codecademy-content/projects/make-a-website/lesson-4/instagram.svg">
+      </li>
+      
+     <li class="col-sm-1"> 
+       <img src="https://s3.amazonaws.com/codecademy-content/projects/make-a-website/lesson-4/medium.svg">
+      </li>
+      
+    </ul>
+  </div>
+  </footer>
+
+</body>
+</html>

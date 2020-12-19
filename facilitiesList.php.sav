@@ -1,0 +1,26 @@
+<?php
+      try {
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $query = 'SELECT *
+		                 FROM facility  
+						 ORDER BY facilityNbr ';
+        
+        $result = $con->query($query);
+		$result->setFetchMode(PDO::FETCH_ASSOC);
+
+        foreach ($result as $row ){
+			$facilityName = $row["facilityName"];
+			
+			print <<<HERE
+			
+			<option value = "$facilityName"> $facilityName </option> 
+HERE;
+        } // end foreach
+
+      } catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+      } // end try
+	  
+?>

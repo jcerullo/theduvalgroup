@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Duval</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+     integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="main.css">
+  
+  <link rel = "stylesheet"
+        type = "text/css" href="jquery-ui-1.10.3.custom.css" />
+ 
+		
+  <script type = "text/javascript"
+          src = "jquery-1.9.1.js"></script>
+  <script type = "text/javascript"
+          src = "jquery-ui-1.10.3.custom.min.js"></script>
+
+  
+  <script type = "text/javascript">
+  
+
+    $(init);
+	
+    function init(){
+      $("h1").addClass("ui-widget-header");
+	  $("#tabs").tabs();
+      $('#schedDatePicker').datepicker({dateFormat: 'yy-mm-dd'});
+	  $('#likeDatePicker').datepicker({dateFormat: 'yy-mm-dd'});
+      $("#slider").slider()
+      .bind("slide", reportSlider);
+      $("#selectable").selectable();
+      $("#sortable").sortable();
+      $("#dialog").dialog();
+      //initially close dialog
+      $("#dialog").dialog("close");
+    } // end init 
+  
+  </script>
+  
+</head>
+<body>
+
+<header class="container">
+<div id="wrapper">
+
+<nav id="nav">
+	<ul id="navigation">
+		<li><a href="indexProcess.php">Login</a></li>
+		<li><a href="#">Member Info &raquo;</a>
+			<ul>
+				<li><a href="members.php">MemberRoster</a></li>
+				<li><a href="mbrProfile.php">MemberProfile</a></li>
+				<li><a href="availability.php">MemberAvailability</a></li>
+				<li><a href="groupAvailability.html">GroupAvailability</a></li>
+				<li><a href="mbrRanking.php">Tennis Rankings</a></li>
+				<li><a href="sumResults.html">MemberStats</a></li>				
+			</ul>
+		</li>
+		<li><a href="#">Court Info &raquo;</a>
+			<ul>
+				<li><a href="facilities.php">Facilities</a></li>
+				<li><a href="facility.php">CourtAvailability</a></li>
+				<li><a href="assignments.html">CourtAssignments</a></li>				
+			</ul>				
+		</li>
+		<li><a href="#">Play Results &raquo;</a>
+			<ul>
+				<li><a href="setResults.html">ResultsEntry</a></li>
+				<li><a href="sumResults.html">ResultsSummary</a></li>				
+			</ul>				
+		</li>
+		<li><a href="changeMonth.php">Change Month</a></li>
+		<li><a href="sendEmail.php">Format Email</a></li>
+		<li><a href="help.php">Help</a></li><br>
+	</ul>
+</nav>
+
+</div><!--end wrapper-->
+</header>
+
+  <div class = "member"> 
+  <style type = "text/css">
+  
+          fieldset {
+            width: 700px;
+            background-color: #eeeeee;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 5px 5px 5px gray;
+          }
+		  
+          label {
+            float: left;
+            clear: left;
+            width: 250px;
+            text-align: right;
+            padding-right: 1em;
+          }
+                   
+          input {
+            float: left;
+          }
+		  
+		  select {
+			  float:left;
+		  }
+          
+          :required {
+            border: 1px solid red;
+          }
+          
+          :invalid {
+            color: white;
+            background-color: red;
+          }
+          
+          button {
+		    text-align: center;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            clear: both;
+          }
+		  
+		  p {
+			margin-left: 100px;
+			text-align: center;
+		  }
+		  
+		  h1 {
+			margin-left: 100px;
+            margin-right:100px;
+			text-align: center;
+		  }
+		  
+		  #submit {
+		    margin-left: 600px;
+			background-color: lightyellow; 
+		  }
+  </style>
+  
+	  <h1> Court Assignments </h1>  
+ 
+	
+    <form action = "assignments.php" method= "post">
+      <fieldset> <br>
+
+		<label>Schedule Date</label>
+        <input type = "text"
+             id = "schedDatePicker" placeholder="Press here for a calendar" name="schedDate" readonly /><br><br>			 
+
+		<label><u>Group Assignment Options :</u> </label><br>
+		
+		<label for = "none"> No Group Assignments</label>
+		<input type = "radio"
+			   name = "preloadOption"
+			   id = "none"
+			   value = "N" />
+		
+		<label for = "random"> Random Selection of Players</label>
+		<input type = "radio"
+			   name = "preloadOption"
+			   id = "random"
+			   value = "R" />
+		
+		<label for = "ranking"> Assign by Tennis Ranking</label>
+		<input type = "radio"
+			   name = "preloadOption"
+			   id = "ranking"
+			   value = "T" />
+		
+		<label for = "likeDate">Assign Like Prior Date</label>
+		<input type = "radio"
+			   name = "preloadOption"
+			   id = "likeDate"
+			   value = "L" />
+			   
+		<label></label>
+        <input type = "text"
+             id = "likeDatePicker" placeholder="Press here for a calendar" name="likeDate" readonly /> 
+			 
+        <input type="submit" id = "submit" value = "Continue"/> <br>
+		
+      </fieldset>
+    </form>
+  </div>
+
+ 
+</body>
+</html>

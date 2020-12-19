@@ -1,0 +1,375 @@
+<?php
+  session_start();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Duval</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+     integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="main.css">
+  
+</head>
+<body>
+<?php
+
+    if (filter_has_var(INPUT_POST, "date")) {
+        $date = filter_input(INPUT_POST, "date");   
+	    $_SESSION["date"] = $date;
+	}
+	else {
+		$date = $_SESSION["date"];
+	}
+
+	$isAdmin = $_SESSION["isAdmin"];
+	
+	$player = "";
+	$court = "";
+	$action = "";
+//                                                                	 load up available members into $available string
+        $available = "";
+		
+	    try {
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003"); 
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+        $query = "SELECT mbrID FROM available WHERE dates = '$date' ";
+        
+        //first pass just gets the column names
+
+        $result = $con->query($query);
+        //return only the first row (we only need field names)
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        foreach ($row as $field => $value){
+        } // end foreach
+ 
+        //second pass gets the data
+        $data = $con->query($query);
+        $data->setFetchMode(PDO::FETCH_ASSOC);
+
+        foreach($data as $row){
+			foreach ($row as $name=>$value){ 
+              $available .= $value . ",";
+			} // end field loop
+        } // end record loop
+
+        $available .= "";
+
+      } catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+      } // end try
+	
+    if (filter_has_var(INPUT_POST, "player"))
+        $player = filter_input(INPUT_POST, "player");
+    		
+	if (filter_has_var(INPUT_POST, "facilityName")) {
+        $court = filter_input(INPUT_POST, "facilityName");
+    }
+	
+    if (filter_has_var(INPUT_POST, "action"))
+        $action = filter_input(INPUT_POST, "action");	
+
+    if ($player != ""){	
+		
+        try {			
+        
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+	        $result = $con->prepare("DELETE FROM assignment
+			   WHERE mbrID = '$player' AND date= '$date'");
+			   
+			$result->execute();
+					 
+        }		 //end of try
+ 	
+        catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+	    }
+		
+    } //end if
+	
+    if ($player != "" && $court != "" && $action = "A"){		
+        try {
+        
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			 
+	        $result = $con->prepare("INSERT INTO assignment 
+			            (rcdNbr,  
+						mbrID,
+						date,
+						facilityName
+						)			
+			     VALUES
+			            (NULL,
+						'$player',
+						'$date',
+						'$court'
+                        )            ");
+
+			$result->execute();
+					 
+        }		 //end of try
+ 	
+        catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+	    }
+    }  //end if
+ 	
+?>
+		
+<header class="container">
+ <div class="row">
+  <h1 class="col-sm-4"></h1>
+    <nav class="col-sm-8 text-right">
+     <p><a href="index.html" role="button">Login</a></p>
+     <p><a href="mbrProfile.php" role="button">MemberProfile</a></p>
+     <p><a href="availability.php" role="button">Availability</a></p> 
+     <p><a href="assignments.html" role="button">CourtAssignments</a></p> 
+     <p><a href="members.php" role="button">Members</a></p> 
+     <p><a href="sendEmail.php" role="button">FormatEmail</a></p>
+     <p><a href="help.php" role="button">Help</a></p>
+    </nav> 
+ </div>
+</header>
+
+  <div class = "member"> 
+  <style type = "text/css">
+  
+          fieldset {
+            width: 600px;
+            background-color: #eeeeee;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 5px 5px 5px gray;
+          }
+		  
+          label {
+            float: left;
+            clear: left;
+            width: 250px;
+            text-align: right;
+            padding-right: 1em;
+          }
+                   
+          input {
+            float: left;
+          }
+		  
+		  select {
+			  float:left;
+		  }
+          
+          :required {
+            border: 1px solid red;
+          }
+          
+          :invalid {
+            color: white;
+            background-color: red;
+          }
+          
+          button {
+		    text-align: center;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            clear: both;
+          }
+		  
+		  p {
+			margin-left: 100px;
+			text-align: center;
+		  }
+		  
+		  h1 {
+			margin-left: 100px;
+            margin-right:100px;
+			text-align: center;
+		  }
+		  
+		  h2 {
+			margin-left: 100px;
+            margin-right:100px;
+			text-align: center;
+		  }
+  </style>
+  
+<?php
+
+$timestamp = strtotime($date);                // get day name
+$dayName = date("l", $timestamp);
+  
+print ("	  <h1><strong> Court Assignments </strong></h1> "); 
+print ("	  <h2> for $dayName, $date</h2> ");
+if ($isAdmin) {
+print <<<HERE
+    <form action = "" method= "post">
+      <fieldset> 
+		<label>Player</label>
+        <input type="text" id="txt_member" name="player" > <br>	
+		
+        <label>Court</label>
+        <select id="selCourt" name=facilityName >
+          <option value = "" selected disabled hidden> </option>		
+		  <option value = "seabreeze">Sea Breeze</option>
+		  <option value = "truman">Truman</option>
+		  <option value = "odell">Odell</option>
+		  <option value = "bacall">Bacall</option>
+		  <option value = "allamanda">Allamanda</option>
+		  <option value = "colony">Colony Cottage</option>
+		</select>
+		
+        <label>Action</label>
+        <select id="selAction"  name="action" >
+		  <option value = "A" >Add</option>
+		  <option value = "D" >Remove</option>
+		</select>
+		
+        <input type="submit" value = "submit"/> <br>
+      </fieldset>
+    </form>
+HERE;
+}  //end if
+?>
+  </div>
+	
+<section>
+    <figure class="col-sm-6">
+	<style type = "text/css">
+		  
+	#assignedList {
+		margin: 100px;
+		
+        h3 {
+			margin-left: 150px;
+            margin-right:150px;
+			text-align: left;
+		  }
+	}
+    </style>
+	
+  <div id = "assignedList"> 
+  
+  <h3><strong> Assigned </strong></h3>
+
+<?php
+
+    $assigned = "";	  //                                          load up assigned members into $assigned string
+      try {
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $query = "SELECT facilityName as 'Courts................', 
+		                 mbrID as 'Players' FROM assignment WHERE date = '$date'
+                         ORDER BY facilityName	 ";
+        
+        //first pass just gets the column names
+        print "<table> \n";
+
+        $result = $con->query($query);
+        //return only the first row (we only need field names)
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        print "  <tr> \n";
+        foreach ($row as $field => $value){
+          print "    <th>$field</th> \n";
+        } // end foreach
+        print "  </tr> \n";
+ 
+        //second pass gets the data
+        $data = $con->query($query);
+        $data->setFetchMode(PDO::FETCH_ASSOC);
+
+        foreach($data as $row){
+          print "  <tr> \n";
+          foreach ($row as $name=>$value) {			  
+            print "    <td>$value</td> \n";              
+          } // end field loop
+          print "  </tr> \n";
+        } // end record loop
+
+        print "</table> \n";
+
+	    // Second query is just for the member IDs
+	    $query = "SELECT mbrID FROM assignment WHERE date = '$date' ";
+        
+        //first pass just gets the column name again
+
+        $result = $con->query($query);
+        //return only the first row (we only need field names)
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        foreach ($row as $field => $value){
+        } // end foreach
+ 
+        //second pass gets the IDs
+        $data = $con->query($query);
+        $data->setFetchMode(PDO::FETCH_ASSOC);
+
+        foreach($data as $row){
+          foreach ($row as $name=>$value) {
+            $assigned .= $value . ",";			                
+          } // end field loop
+		$assigned  .= "\n";
+        } // end record loop
+
+      } catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+      } // end try
+?>
+   </div>
+   </figure>
+   
+    <style type = "text/css">
+		  
+	#unassignedList {
+		margin: 100px;
+		
+        h3 {
+			margin-left: 150px;
+            margin-right:150px;
+			text-align: left;
+		  }
+	}
+    </style> 
+	
+   <figure class="col-sm-6">
+   <div id = "unassignedList">  
+    <h3><strong> Unassigned Available Members</strong></h3>
+<?php
+      $availableArray = explode(",", $available);
+	  $assignedArray  = explode(",", $assigned);
+      $unassignedArray = array();
+	  
+	  $i = 0;  $k =0;
+      while ($i < sizeof($availableArray)-1){
+		$j = 0;
+		$availableAssigned = false;
+		while ($j < sizeof($assignedArray)-1){
+		  if( trim($availableArray[$i]) == trim($assignedArray[$j]) ) {			  
+			$availableAssigned = true;
+			break;
+		  }
+		  $j++;
+		}
+	    if ($availableAssigned == false) {
+		  print ("$availableArray[$i]<br>");
+          $unassignedArray[$k] = $availableArray[$i];
+          $k++;
+        }		
+		
+	    $i++;
+      }
+	   	       		   
+?>
+   </div>  
+   </figure> 
+	
+</section>   
+</body>
+</html>

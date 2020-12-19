@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> A Simple HTML Document </title>
+  </head>
+  <body>
+    <p id="s1"> This example outlines the typical structure
+                of a HTML document.</p>
+    <p id="s2"> This p node has the attribute id.  There 
+                should be one &lt;html&gt;, one
+                &lt;head&gt; and one &lt;body&gt;
+                nodes.</p>
+  </body>
+</html> 

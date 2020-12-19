@@ -1,0 +1,429 @@
+<?php
+  session_start();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Duval</title>
+  <meta charset = "UTF-8" />
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+     integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="main.css">
+
+  <link rel = "stylesheet"
+        type = "text/css"
+        href = "jquery-ui-1.10.3.custom.css" />
+
+  <style type = "text/css">
+
+    h1 {
+      text-align: center;
+    }
+    #selectable .ui-selecting {
+      background-color: gray;
+    }
+    #selectable .ui-selected {
+      background-color: black;
+      color: white;
+    }
+	img {
+	  float: left;
+	}
+  </style>
+  <script type = "text/javascript"
+          src = "jquery-1.9.1.js"></script>
+  <script type = "text/javascript"
+          src = "jquery-ui-1.10.3.custom.min.js"></script>
+  <script type = "text/javascript">
+
+    $(init);
+    function init(){
+      $("h1").addClass("ui-widget-header");
+      $("#tabs").tabs();
+      $("#datePicker").datepicker();
+      $("#slider").slider()
+      .bind("slide", reportSlider);
+      $("#selectable").selectable();
+      $("#sortable").sortable();
+	  
+      $("#dialog").dialog({
+		  autoOpen : false,         		  
+	  }); 
+	  
+    } // end init
+	
+	var mbrID = " ";
+	var line1 = " ";
+	var line2 = " ";
+	var line3 = " ";
+	var line4 = " ";
+	
+    function reportSlider(){
+      var sliderVal = $("#slider").slider("value");
+      $("#slideOutput").html(sliderVal);
+    } // end reportSlider
+	
+    function openDialog()
+	{		
+       $("#dialog").dialog("open");	   
+    } // end openDialog
+	
+    function closeDialog(){
+      $("#dialog").dialog("close");
+    } // end closeDialog
+	
+	function showPhoto(mbrID, line1, line2, line3, line4)	
+	{	
+        HTMLdata = 	"<img src = " + "'" + mbrID + ".jpg'" + 
+		            " height = 100 width = 100" + 
+					" alt = 'member photo'> " +
+					" <p></p> " + 
+					 line1 + " " +
+					 line2 + "<br>" +
+					 line3 + "<br>" +
+					 line4 + "<br>";
+	   $("#dialog").html(HTMLdata);
+       $("#dialog").dialog("open");	   
+    } // end showPhoto
+
+    </script>
+</head>
+<body>
+
+<?php
+	$isAdmin = $_SESSION["isAdmin"];
+	
+    if (filter_has_var(INPUT_POST, "addMbr")){
+        $mbrID = filter_input(INPUT_POST, "addMbr");	
+	  
+        try {
+        
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+                                                           // then update SQL record
+			 
+	        $result = $con->prepare("INSERT INTO member 
+			            (mbrID,
+						firstName,
+						lastName,
+						phonePrimary,
+						phoneSecondary,
+						village,
+						streetAddr,
+						cityAddr,
+						zipAddr,
+						emailAddr,
+						status,
+						password,
+						tennisRanking,
+						displayPhoto)			
+			     VALUES
+			            ('$mbrID',
+						' ',
+						' ',
+						' ',
+						' ',
+						' ',
+						' ',
+						' ',
+						' ',
+						' ',
+						'I',
+						'password',
+						'N',
+						' ' ) ");
+
+			$result->execute();
+					 
+        }		 //end of try
+ 	
+        catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+	    }
+    }  //end if
+ 	
+    if (filter_has_var(INPUT_POST, "deleteMbr")){
+        $mbrID = filter_input(INPUT_POST, "deleteMbr");
+		
+        try {
+        
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+                                                           // then update SQL record
+			 
+	        $result = $con->prepare("DELETE FROM member 
+			   WHERE mbrID = '$mbrID' ");
+			   
+			$result->execute();
+					 
+        }		 //end of try
+ 	
+        catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+	    }
+		
+    } //end if
+?>
+
+<header class="container">
+<div id="wrapper">
+
+<nav id="nav">
+	<ul id="navigation">
+		<li><a href="index.html">Login</a></li>
+		<li><a href="#">Members &raquo;</a>
+			<ul>
+				<li><a href="members.php">Roster</a></li>
+				<li><a href="mbrProfile.php">MemberProfile</a></li>
+				<li><a href="availability.php">MemberAvailability</a></li>
+				<li><a href="#">Stats</a></li>				
+			</ul>
+		</li>
+		<li><a href="#">Courts &raquo;</a>
+			<ul>
+				<li><a href="#">CourtAvailability</a></li>
+				<li><a href="assignments.html">CourtAssignments</a></li>				
+			</ul>				
+		</li>
+		<li><a href="#">Play Results &raquo;</a>
+			<ul>
+				<li><a href="setResults.html">ResultsEntry</a></li>
+				<li><a href="sumResults.php">ResultsSummary</a></li>				
+			</ul>				
+		</li>
+		<li><a href="changeMonth.php">Change Month</a></li>
+		<li><a href="sendEmail.php">Format Email</a></li>
+		<li><a href="help.php">Help</a></li><br>
+	</ul>
+</nav>
+
+</div><!--end wrapper-->
+</header>
+  
+<?php
+if ($isAdmin) {
+print <<<HERE
+  <div class = "member"> 
+  <style type = "text/css">
+            fieldset {
+            width: 600px;
+            background-color: #eeeeee;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 5px 5px 5px gray;
+          }
+          label {
+            float: left;
+            clear: left;
+            width: 250px;
+            text-align: right;
+            padding-right: 1em;
+          }
+                   
+          input {
+            float: left;
+          }
+		  
+		  select {
+			  float:left;
+		  }
+          
+          :required {
+            border: 1px solid red;
+          }
+          
+          :invalid {
+            color: white;
+            background-color: red;
+          }
+          
+          button {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            clear: both;
+          }
+		  
+		  p {
+			margin-left: 100px;
+		  }
+		  
+		  #submit {
+		    background-color: lightyellow;
+		  }
+  </style>
+  
+    <form action = "" method= "post">
+      <fieldset> <br>
+	  
+        <label>Add this member</label>
+        <input type="text" value="" id="txt_addMbr" name="addMbr"> <br>
+		<label>Delete this member</label>
+        <input type="text" value="" id="txt_deleteMbr" name="deleteMbr"> <br>       
+        <input type="submit" value = "submit" id = "submit"/> <br>
+      </fieldset>
+    </form>
+	
+    </div>
+HERE;
+}         // end if
+?>
+  
+  <div id = "memberList"> 
+  <style type = "text/css">
+		  
+	#memberList {
+		margin: 100px;
+	}
+  </style>
+  
+	  <h2> The active Duval Group members are: </h2>  
+      <p>  
+<?php
+      try {
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $query = 'SELECT mbrID, 
+                         phonePrimary,                        
+						 village,
+						 tennisRanking,
+						 firstName, 
+					     lastName,
+						 displayPhoto
+		                 FROM member WHERE status = "A" ORDER BY mbrID ';
+        
+        //first pass just gets the column names
+        print "<table> \n";
+
+        $result = $con->query($query);
+        //return only the first row (we only need field names)
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        print "  <tr> \n";
+        foreach ($row as $field => $value){
+		  if ($field == mbrID) print " <th> Member  ........</th> \n";
+          if ($field == phonePrimary) print " <th> Phone...................</th> \n";  
+        } // end foreach
+        print "  </tr> \n";
+ 
+        //second query gets the data
+        $data = $con->query($query);
+        $data->setFetchMode(PDO::FETCH_ASSOC);		
+
+        foreach($data as $row){
+          print "  <tr> \n";
+		       
+          $showRanking = '"' . ' ' . '"';
+          $showFirstName = '"' . ' ' . '"';
+          $showLastName = '"' . ' ' . '"';
+		  $showVillage = '"' . ' ' . '"';
+
+          foreach ($row as $name=>$value){              
+
+		    if ($name=='mbrID') {
+			  print "    <td>$value</td> \n";
+			  $mbrID = $value;
+			  $fileConnected = fopen("$mbrID.jpg", "r");
+			  $showPhoto = false;
+			  $isMore = false;
+			  if ($fileConnected == true) {
+				$saveID = $mbrID;
+		    	$isMore = true;
+				fclose($fileConnected);
+              }
+            }
+						
+			if ($name == 'phonePrimary') print "    <td>$value</td> \n";
+			if ($name == 'village' && $value != ' ') $showVillage =  '"' . 'Village of ' . $value . '"';
+			if ($name == 'tennisRanking' && $value != ' ') $showRanking = '"' . $value . '"';
+			if ($name == 'firstName' && $value != ' ') $showFirstName = '"' . $value . '"';
+			if ($name == 'lastName' && $value != ' ') $showLastName = '"' . $value . '"';
+			if ($name == 'displayPhoto' && $value == 'Y') $showPhoto = true;
+			
+			
+          } // end field loop
+		  
+		  if ($isMore && $showPhoto) {
+			  $showID = '"' . $saveID . '"';
+			  print "<td><strong><input type = 'button'
+                     value = 'Photo'
+                     onclick = 'showPhoto($showID, $showFirstName, $showLastName, $showVillage, $showRanking)' /></strong></td> \n";
+		  }
+          print "  </tr> \n";
+        } // end record loop
+
+        print "</table> \n";
+
+      } catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+      } // end try
+
+?>
+  </p>  
+
+	
+	   <h2> The inactive Duval Group members are: </h2>
+       <p> 
+	   
+	   
+<?php
+      try {
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $query = 'SELECT mbrID as "Member........", phonePrimary as "Phone...................",
+                    firstName as "Name", lastName as "" 		
+		            FROM member WHERE status = "I" ORDER BY mbrID ';
+        
+        //first pass just gets the column names
+        print "<table> \n";
+
+        $result = $con->query($query);
+        //return only the first row (we only need field names)
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        print "  <tr> \n";
+        foreach ($row as $field => $value){
+          print "    <th>$field</th> \n";
+        } // end foreach
+        print "  </tr> \n";
+ 
+        //second query gets the data
+        $data = $con->query($query);
+        $data->setFetchMode(PDO::FETCH_ASSOC);
+
+        foreach($data as $row){
+          print "  <tr> \n";
+          foreach ($row as $name=>$value){  
+            print "    <td>$value</td> \n"; 
+          } // end field loop	
+
+          print "  </tr> \n";
+        } // end record loop
+
+        print "</table> \n";
+
+      } catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+      } // end try
+
+?>
+   </p>
+   </div> 
+   
+<?php
+print <<<HERE
+<div id = "dialog"
+    title = "The Duval Group" >
+
+</div>	
+HERE;
+?>
+   
+</body>
+</html>

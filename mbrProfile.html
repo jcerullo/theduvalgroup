@@ -1,0 +1,147 @@
+<html>
+<head>
+  <title>Duval</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="main.css">
+	
+</head>
+<body>
+
+eader class="container">
+<div id="wrapper">
+
+<nav id="nav">
+	<ul id="navigation">
+		<li><a href="index.html">Login</a></li>
+		<li><a href="#">Member Info &raquo;</a>
+			<ul>
+				<li><a href="members.php">MemberRoster</a></li>
+				<li><a href="mbrProfile.php">MemberProfile</a></li>
+				<li><a href="availability.php">MemberAvailability</a></li>
+				<li><a href="sumResults.html">MemberStats</a></li>				
+			</ul>
+		</li>
+		<li><a href="#">Courts &raquo;</a>
+			<ul>
+				<li><a href="#">CourtAvailability</a></li>
+				<li><a href="assignments.html">CourtAssignments</a></li>				
+			</ul>				
+		</li>
+		<li><a href="#">Play Results &raquo;</a>
+			<ul>
+				<li><a href="setResults.html">ResultsEntry</a></li>
+				<li><a href="sumResults.html">ResultsSummary</a></li>				
+			</ul>				
+		</li>
+		<li><a href="changeMonth.php">Change Month</a></li>
+		<li><a href="sendEmail.php">Format Email</a></li>
+		<li><a href="help.php">Help</a></li><br>
+	</ul>
+</nav>
+
+</div><!--end wrapper-->
+</header>
+
+<?php
+// Set member id for testing
+   $mbrID = "JamesL";
+   $isAdministrator = true;
+   $password = "password";
+   print "<p> You are logged in as $mbrID </p>";
+?>
+
+  <div id = "divOutput">
+  </div>
+
+  <div class = "member"> 
+  <style type = "text/css">
+            fieldset {
+            width: 600px;
+            background-color: #eeeeee;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 5px 5px 5px gray;
+          }
+          label {
+            float: left;
+            clear: left;
+            width: 250px;
+            text-align: right;
+            padding-right: 1em;
+          }
+                   
+          input {
+            float: left;
+          }
+		  
+		  select {
+			  float:left;
+		  }
+          
+          :required {
+            border: 1px solid red;
+          }
+          
+          :invalid {
+            color: white;
+            background-color: red;
+          }
+          
+          button {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            clear: both;			
+          }
+		  
+		  #submit {
+			  background-color: lightyellow;
+		  }
+  </style>
+  
+  
+    <form action = "">
+      <fieldset> <br>
+	  <p>Starred items are required.  Don't forget to press Submit when done. </p>
+        <label>*First Name</label>
+        <input type="text" value="" id="txt_firstName"> <br>
+		<label>*Last Name</label>
+        <input type="text" value="" id="txt_lastName"> <br>
+        <label>*Email</label>
+        <input type="text" value="" id="txt_email"> <br>
+        <label>*Primary Phone Number (for tennis)<br>
+        (ddd) ddd-dddd</label>
+        <input type="text" value="(000) 000-0000" id="txt_phonePrimary"> <br>
+		<label> Secondary Phone Number (for emergency)</label><br>
+        <input type="text" value="(000) 000-0000" id="txt_phoneSecondary"> <br>
+		<label>Village</label>
+        <input type="text" value="" id="txt_village"> <br>
+		<label>Street Address</label>
+        <input type="text" value="" id="txt_streetAddr"> <br>
+		<label>City</label>
+        <input type="text" value="" id="txt_cityAddr"> <br>
+		<label>Zip</label>
+        <input type="text" value="" id="txt_zipAddr"> <br>
+		<label>*Status</label>
+		<select status = "selStatus">
+          <option value = "active">Active</option>		
+		  <option value = "inactive">Inactive</option>
+		  <option value = "deleted">Deleted</option>
+		</select> <br>
+		<label>*Password</label>
+        <input type="text" value="" id="txt_password" readonly > <br>
+		<label>Tennis Ranking (ok to guess)</label>
+        <input type="text" value="" id="txt_tennisRanking"> <br><br>
+		<label>Authorize Display of Photo</label>
+        <input type="text" value="$displayPhoto" id="txt_displayPhoto" name="displayPhoto" > <br>
+        <button type="button" onclick="validate()">
+          submit
+        </button> <br>
+      </fieldset>
+    </form>
+  </div>
+
+</body>
+</html> 

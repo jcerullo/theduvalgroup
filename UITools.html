@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang = "en-US"> 
+
+<head>
+
+    
+  <meta charset = "UTF-8" />
+  <link rel = "stylesheet"
+        type = "text/css"
+        href = "jquery-ui-1.10.3.custom.css" />
+
+  <style type = "text/css">
+    h1 {
+      text-align: center;
+    }
+    #selectable .ui-selecting {
+      background-color: gray;
+    }
+    #selectable .ui-selected {
+      background-color: black;
+      color: white;
+    }
+  </style>
+  <script type = "text/javascript"
+          src = "jquery-1.9.1.js"></script>
+  <script type = "text/javascript"
+          src = "jquery-ui-1.10.3.custom.min.js"></script>
+  <script type = "text/javascript">
+
+    $(init);
+    function init(){
+      $("h1").addClass("ui-widget-header");
+      $("#tabs").tabs();
+      $("#datePicker").datepicker();
+      $("#slider").slider()
+      .bind("slide", reportSlider);
+      $("#selectable").selectable();
+      $("#sortable").sortable();
+      $("#dialog").dialog();
+      //initially close dialog
+      $("#dialog").dialog("close");
+    } // end init
+    function reportSlider(){
+      var sliderVal = $("#slider").slider("value");
+      $("#slideOutput").html(sliderVal);
+    } // end reportSlider
+    function openDialog(){
+      $("#dialog").dialog("open");
+    } // end openDialog
+    function closeDialog(){
+      $("#dialog").dialog("close");
+    } // end closeDialog
+
+    </script>
+  <title>UItools.html</title>
+</head>
+<body>
+  <h1>UI tools</h1>
+  <div id = "tabs">
+    <ul>
+      <li><a href = "#datePickerTab">datePicker</a></li>
+      <li><a href = "#sliderTab">slider</a></li>
+      <li><a href = "#selectableTab">selectable</a></li>
+      <li><a href = "#sortableTab">sortable</a></li>
+      <li><a href = "#dialogTab">dialog</a></li>
+    </ul>
+    <div id = "datePickerTab">
+      <h2>date picker</h2>
+      <input type = "text"
+             id = "datePicker" />
+    </div>
+    <div id = "sliderTab">
+      <h2>slider</h2>
+      <div id = "slider"></div>
+      <div id = "slideOutput">0</div>
+    </div>
+    <div id = "selectableTab">
+      <h2>selectable</h2>
+      <ul id = "selectable">
+        <li>alpha</li>
+        <li>beta</li>
+        <li>gamma</li>
+        <li>delta</li>
+      </ul>
+    </div>
+    <div id = "sortableTab">
+      <h2>sortable</h2>
+      <ul id = "sortable">
+        <li>alpha</li>
+        <li>beta</li>
+        <li>gamma</li>
+        <li>delta</li>
+      </ul>
+    </div>
+    <div id = "dialogTab">
+      <h2>dialog</h2>
+      <div id = "dialog"
+           title = "my dialog">
+        <p>
+          The dialog class allows you to have a movable, sizable
+          customized dialog box consistent with the installed
+          page theme.
+        </p>
+      </div>
+      <input type = "button"
+             value = "open dialog"
+             onclick = "openDialog()" />
+      <input type = "button"
+             value = "close dialog"
+             onclick = "closeDialog()" />
+    </div>
+  </div>
+</body>
+</html>

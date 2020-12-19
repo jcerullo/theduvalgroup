@@ -1,0 +1,831 @@
+Temporary Code
+.member {
+  border-rad  color: #000000;
+  color: black;
+  border-radius: 2px;
+  border: 0px;
+  text-shadow: none	
+  text-align: center;
+  margin: 10 50 30px;
+  
+   
+fieldset {
+            width: 600px;
+            background-color: #eeeeee;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 5px 5px 5px gray;
+          }
+          label {
+            float: left;
+            clear: left;
+            width: 250px;
+            text-align: right;
+            padding-right: 1em;
+          }
+          
+          input {
+            float: left;
+          }
+		  
+		  select {
+			  float:left;
+		  }
+          
+          :required {
+            border: 1px solid red;
+          }
+          
+          :invalid {
+            color: white;
+            background-color: red;
+          }
+          
+          button {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            clear: both;
+          }
+		  
+<?php
+  function init() {
+	global $mbrID;
+	global $isAdmin;
+	global $inMbr;
+	global $password;
+	if (isSet ($_SESSION["mbrID"])) {
+      $mbrID = $_SESSION["mbrID"];
+	}  //end if 
+  }    //end init
+  
+<?php
+      try {
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $query = 'SELECT mbrID FROM member WHERE mbrID="$mbrID"';
+        $data = $con->query($query);
+        $data->setFetchMode(PDO::FETCH_ASSOC);
+		
+		$firstName = filter_input(INPUT_GET, "firstName");
+		
+		$phonePrimary = filter_input(INPUT_GET, "phonePrimary");
+		UPDATE member SET phonePrimary = "$phonePrimary" WHERE mbrID="$mbrID";
+
+
+      } catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+      } // end try
+
+?>
+
+
+<?php
+  if (filter_has_var(INPUT_POST, "mbrID")){
+   $mbrID = filter_input(INPUT_POST, "mbrID");	  
+   $_SESSION["mbrID"] = $mbrID;
+  }
+  if (filter_has_var(INPUT_POST, "password")){
+   $password = filter_input(INPUT_POST, "password");	  
+   $_SESSION["password"] = $password; 
+  }
+  print "<h3> test input:  mbrID = $mbrID and password = $password </h3>
+?>
+
+  if ($mbrID != NULL) {
+    UPDATE member SET phonePrimary = "$phonePrimary" WHERE mbrID = "$mbrID";	
+  }
+  
+    if (filter_has_var(INPUT_GET, "phonePrimary")){
+   $phonePrimary = filter_input(INPUT_GET, "phonePrimary");
+  }	 //end if
+  
+try {
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        if ($mbrID != NULL) {
+          $con->execute ('UPDATE member SET phonePrimary = "$phonePrimary" WHERE mbrID = "$mbrID" ');	
+        }		
+    } // end try
+catch(PDOException $e) {
+        echo 'ERROR: ' . $e->getMessage();
+        }
+		
+		 $result = $con->query("SELECT mbrID, phonePrimary FROM member WHERE mbrID = '$mbrID' ");
+		 
+		   if (filter_has_var(INPUT_POST, "firstName")){
+   $firstName = filter_input(INPUT_POST, "firstName");	  
+   $_SESSION["firstName"] = $firstName;
+  }
+  
+  if (filter_has_var(INPUT_POST, "phonePrimary")){
+   $phonePrimary = filter_input(INPUT_POST, "phonePrimary");	
+   $_SESSION["phonePrimary"] = $phonePrimary;	  
+  }
+  
+    if (filter_has_var(INPUT_POST, "firstName")){
+   $firstName = filter_input(INPUT_POST, "firstName");	  
+   $_SESSION["firstName"] = $firstName;
+  }
+  
+  if (filter_has_var(INPUT_POST, "phonePrimary")){
+   $phonePrimary = filter_input(INPUT_POST, "phonePrimary");	
+   $_SESSION["phonePrimary"] = $phonePrimary;	  
+  }
+ 
+     catch(PDOException $e) {
+        echo 'ERROR: ' . $e->getMessage();
+    }
+	
+	try { 
+	
+	<?php
+  function init() {
+	global $mbrID;
+	global $isAdmin;
+	global $isMbr;
+	global $isActive;
+	global $password;
+	global $firstName;
+    global $lastName;
+	global $phonePrimary;
+	global $phoneSecondary;
+	global $village;
+	global $streetAddr;
+	global $cityAddr;
+	global $zipAddr;
+	global $emailAddr;
+	global $status;
+	global $assignedTennisRanking;
+	global $mrbTennisRanking;
+	
+	$_SESSION["isAdmin"] = true;  // testing...this paragragh will be removed
+	$_SESSION["isMbr"] = true;
+	$_SESSION["isActive"] = true;
+	$isAdmin = $_SESSION["isAdmin"];  
+	$isMbr = $_SESSION["isMbr"];     
+	$isActive = $_SESSION["isActive"];  
+	
+	if (isSet ($_SESSION["mbrID"])) {
+      $mbrID = $_SESSION["mbrID"];
+	  $password = $_SESSION["password"];
+	  $firstName = $_SESSION["firstName"];
+	    // Set other globals: isMbr, isActive, isAdmin
+	}   // end if
+    else {
+      $_SESSION["mbrID"] = "";
+	  $_SESSION["password"] = "";
+      $mbrID = "";
+	  $password = "";
+    }  //end else		
+  }    //end init
+
+
+  init();
+                                                         // if form not yet displayed 
+	try {                                                // retrieve SQL record
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+        $result = $con->query("SELECT * FROM member WHERE mbrID = '$mbrID' ");
+		$result->setFetchMode(PDO::FETCH_ASSOC);
+
+		foreach ($result as $row) {
+		  foreach ($row as $name =>$value ) {            // populate form values for form display
+			if ($name == 'firstName')  $firstName = $value;
+			if ($name == 'lastName')   $lastName  = $value;
+			if ($name == 'phonePrimary')   $phonePrimary  = $value;
+			if ($name == 'phoneSecondary')   $phoneSecondary  = $value;
+			if ($name == 'village')   $village  = $value;
+			if ($name == 'streetAddr')   $streetAddr  = $value;
+			if ($name == 'cityAddr')   $cityAddr  = $value;
+			if ($name == 'zipAddr')   $zipAddr  = $value;
+			if ($name == 'emailAddr')   $emailAddr  = $value;
+			if ($name == 'status')   $status  = $value;
+			if ($name == 'password')   $password  = $value;
+			if ($name == 'tennisRanking')   $tennisRanking  = $value;
+		  }
+		 		  
+	    }        
+		
+    }		 //end of try
+ 	
+    catch(PDOException $e) {
+        echo 'ERROR: ' . $e->getMessage();
+    }	  
+?>
+
+<?php
+if ($isActive == true) {		    
+print "	<form action="availability.php" method= "post"> ";
+}
+else {
+print "	<form action="mbrProfile.php" method= "post"> ";
+}	
+?>
+
+	try {                                                // retrieve SQL record
+		
+        $result = $con->query("SELECT * FROM member WHERE mbrID = '$mbrID' ");
+		$result->setFetchMode(PDO::FETCH_ASSOC);
+
+		foreach ($result as $row) {
+		  foreach ($row as $name =>$value ) {            // populate form values for form display
+			if ($name == 'firstName')  $firstName = $value;
+			if ($name == 'lastName')   $lastName  = $value;
+			if ($name == 'phonePrimary')   $phonePrimary  = $value;
+			if ($name == 'phoneSecondary')   $phoneSecondary  = $value;
+			if ($name == 'village')   $village  = $value;
+			if ($name == 'streetAddr')   $streetAddr  = $value;
+			if ($name == 'cityAddr')   $cityAddr  = $value;
+			if ($name == 'zipAddr')   $zipAddr  = $value;
+			if ($name == 'emailAddr')   $emailAddr  = $value;
+			if ($name == 'status')   $status  = $value;
+			if ($name == 'password')   $password  = $value;
+			if ($name == 'tennisRanking')   $tennisRanking  = $value;
+		  }
+		 		  
+	    }        
+		
+    }		 //end of try
+ 	
+    catch(PDOException $e) {
+        echo 'ERROR: ' . $e->getMessage();
+    }
+	
+	        $con->execute("UPDATE member
+		              SET firstName = '$firstName',
+					      lastName = '$lastName',
+					      phonePrimary = '$phonePrimary',
+					      phoneSecondary = '$phoneSecondary',
+					      village = '$village',
+					      streetAddr = '$streetAddr',
+					      cityAddr = '$cityAddr',
+					      zipAddr = '$zipAddr',
+					      emailAddr = '$emailAddr',
+					      status = '$status',
+					      password = '$password',
+					      tennisRanking = '$tennisRanking'
+					  WHERE mbrID = '$mbrID' ");
+	
+	        $con->execute("UPDATE member
+		              SET firstName = $firstName,
+					      lastName = $lastName
+					      phonePrimary = $phonePrimary,
+					      phoneSecondary = $phoneSecondary,
+					      village = $village,
+					      streetAddr = $streetAddr,
+					      cityAddr = $cityAddr,
+					      zipAddr = $zipAddr,
+					      emailAddr = $emailAddr,
+					      status = $status,
+					      password = $password,
+					      tennisRanking = $tennisRanking
+					  WHERE mbrID = $mbrID ");
+					  
+					  
+
+		<label>*Status</label>
+		
+		<input type = "radio" 
+		  name = "status"
+		  value = "I" /> 
+
+		<input type = "radio" 
+		  name = "status"
+		  value = "A" /> 
+
+		<input type = "radio" 
+		  name = "status"
+		  value = "D" /> <br>
+		  
+		    <link rel="stylesheet" type="text/css" href="jquery-ui.multidatepicker.css">
+			  <script> type = "text/javascript" src="js/query-1.9.1.js"></script>
+  <script> type = "text/javascript" src="jquery-ui.datepicker.js">
+  
+  /* states and images */
+.ui-icon {
+	width: 16px;
+	height: 16px;
+}
+.ui-icon,
+.ui-widget-content .ui-icon {
+	background-image: url(images/ui-icons_222222_256x240.png);
+}
+.ui-widget-header .ui-icon {
+	background-image: url(images/ui-icons_ffffff_256x240.png);
+}
+.ui-state-default .ui-icon {
+	background-image: url(images/ui-icons_ef8c08_256x240.png);
+}
+.ui-state-hover .ui-icon,
+.ui-state-focus .ui-icon {
+	background-image: url(images/ui-icons_ef8c08_256x240.png);
+}
+.ui-state-active .ui-icon {
+	background-image: url(images/ui-icons_ef8c08_256x240.png);
+}
+.ui-state-highlight .ui-icon {
+	background-image: url(images/ui-icons_228ef1_256x240.png);
+}
+.ui-state-error .ui-icon,
+.ui-state-error-text .ui-icon {
+	background-image: url(images/ui-icons_ffd27a_256x240.png);
+}
+
+<?php
+   print "$displayMonth";
+?>
+
+  monthArray = array("January", "February", "March", "April", "May", "June"'
+                     "July", "August", "September", "October", "November", "December");
+					 
+ if (filter_has_var(INPUT_POST, "dates")){
+        $dates = filter_input(INPUT_POST, "dates");
+		$dateArray = explode(",", $dates);		
+		
+		foreach($data as $row){
+          print "  <tr> \n";
+          foreach ($row as $name=>$value){ 
+		    $timestamp = strtotime($value);
+            $dayName = 	date("l",$timestamp);	  
+            print "    <td>   $dayName, $value</td> \n";              
+          } // end field loop
+          print "  </tr> \n";
+        } // end record loop
+		
+		$("#datePicker").multiDatesPicker({altField:'#datePicker',
+	                                     pickableRange: 7,
+	                                     adjustRangeToDisabled: true,
+	                                     addDisabledDates: [date.setDate(10), date.setDate(15)]});
+		
+	var daysInMonth = new Array(12);
+	  daysInMonth[0] = 31;
+	  daysInMonth[1] = 28;
+	  daysInMonth[2] = 31;
+	  daysInMonth[3] = 30;
+	  daysInMonth[4] = 31;
+	  daysInMonth[5] = 30;
+	  daysInMonth[6] = 31;
+	  daysInMonth[7] = 31;
+	  daysInMonth[8] = 30;
+	  daysInMonth[9] = 31;
+	  daysInMonth[10] = 30;
+	  daysInMonth[11] = 31;
+	  currentMonth = getMonth();                       //0-11
+	  firstDate = daysInMonth[currentMonth] +1;  //first date to display from today
+      $('#datePicker').multiDatesPicker({
+	               minDate: firstDate-date.getDate(), 
+	               maxDate: 71 });
+
+            $('#datePicker').multiDatesPicker({
+	               minDate: 31-date.getDate()+1, 
+	               maxDate: 71 });
+				   
+    if (filter_has_var(INPUT_POST, "addMbr")){
+        $mbrID = filter_input(INPUT_POST, "addMbr");	
+	  
+        try {
+        
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+                                                           // then update SQL record
+			 
+	        $result = $con->prepare("INSERT INTO member 
+			            (mbrID,
+						firstName,
+						lastName,
+						phonePrimary,
+						phoneSecondary,
+						village,
+						streetAddr,
+						cityAddr,
+						zipAddr,
+						emailAddr,
+						status,
+						password,
+						tennisRanking)			
+			     VALUES
+			            ('$mbrID',
+						' ',
+						' ',
+						' ',
+						' ',
+						' ',
+						' ',
+						' ',
+						' ',
+						' ',
+						'I',
+						'password',
+						' ' ) ");
+
+			$result->execute();
+					 
+        }		 //end of try
+ 	
+        catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+	    }
+    }  //end if
+ 	
+    if (filter_has_var(INPUT_POST, "deleteMbr")){
+        $mbrID = filter_input(INPUT_POST, "deleteMbr");
+		
+        try {
+        
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+                                                           // then update SQL record
+			 
+	        $result = $con->prepare("DELETE FROM member 
+			   WHERE mbrID = '$mbrID' ");
+			   
+			$result->execute();
+					 
+        }		 //end of try
+ 	
+        catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+	    }
+		
+    } //end if
+	                                                   //mydates is a test
+	if (filter_has_var(INPUT_POST, "dates") {
+        $dates = filter_input(INPUT_POST, "dates");
+		$dateArray = explode(",", $dates);		
+	  
+        try {
+        
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+                                                           // delete then update SQL records
+		$result = $con->prepare("DELETE FROM available WHERE mbrID='$mbrID' ");
+		$result->execute();
+			
+		  for ($i = 0; $i < sizeof($dateArray); $i++) {
+	        $result = $con->prepare("INSERT INTO available 
+			            (rcdNbr,
+						 mbrID,
+						 dates)			
+			          VALUES
+			            ( NULL,
+						 '$mbrID',
+						 '$dateArray[$i]') ");
+			$result->execute();
+		  } //end for		 
+        }		 //end of try
+		
+        catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+	    }
+    }  //end if
+	
+	  <link rel = "stylesheet"
+        type = "text/css" href="jquery-ui.multidatespicker.css" />
+		
+		  <script type = "text/javascript"
+          src = "jquery-ui.multidatespicker.js"></script>
+		  
+	<style type = "text/css">
+		  
+	#assignedList {
+		margin: 100px;
+		
+        h3 {
+			margin-left: 150px;
+            margin-right:150px;
+			text-align: left;
+		  }
+	}
+    </style>
+	
+			
+		    $fp = fopen("available.csv", "w");
+		
+		    $result = $con->prepare("SELECT mbrID FROM available INTO 
+                        OUTFILE '$fp'
+						FIELDS ESCAPED BY ' " '
+						TERMINATED BY ','
+						ENCLOSED BY ' " '
+						LINES TERMINATED BY '\n'
+                        WHERE dates = '$date' ");
+			$result->execute();
+			
+			fclose($fp);
+			
+	  $j = 0;
+      for ($i = 0; $i < sizeof($availableArray); $i++) {
+        if ( in_array($availableArray[i], assignedArray) ) {
+		  print ("Available-Assigned: $availableArray[i]");
+		}
+		else {
+          $unassigned[$j] = $availableArray[i];
+		  print ("Unassigned: $unassigned[$j]");
+		  $j = $j +1;
+        }  // end else
+      }    // end for	       		   
+
+		  if( $availableArray[$i] == $assignedArray[$j] ) {
+	  
+	  print ( "Found in assigned array: $availableArray[$i] <br> ");
+	  
+	  <?php
+
+    $to = "";                                   // default email to
+	$subj = "Topic";                            // default email subject
+	$dates = "00/00/00"                         // optional dates
+	$body = ".";                                // default email body
+
+    if (filter_has_var(INPUT_POST, "to"))
+        $to = filter_input(INPUT_POST, "to");
+    		
+	if (filter_has_var(INPUT_POST, "subj")) {
+        $subj = filter_input(INPUT_POST, "subj");
+    }
+	
+    if (filter_has_var(INPUT_POST, "dates"))
+        $dates = filter_input(INPUT_POST, "dates");
+	
+    if (filter_has_var(INPUT_POST, "body"))
+        $body = filter_input(INPUT_POST, "body");		
+                                                                	 
+    $active = "";                                                //  load up active members into $active string                                              
+    $inactive = "";                                              //  load up inactive members
+    $admins = "";                                                //  load up club administrators
+	$all = "";                                                   //  load up all club members
+		
+	   try {
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003"); 
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		                                                               
+        $query = "SELECT emailAddr FROM member WHERE status = 'A' ";
+        
+        //first pass just gets the column names
+
+        $result = $con->query($query);
+        //return only the first row (we only need field names)
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        foreach ($row as $field => $value){
+        } // end foreach
+ 
+        //second pass gets the data
+        $data = $con->query($query);
+        $data->setFetchMode(PDO::FETCH_ASSOC);
+
+        foreach($data as $row){
+			foreach ($row as $name=>$value){ 
+              $active .= $value . ",";
+			} // end field loop
+        } // end record loop
+
+        $active .= "";                                           //  end of load up of active members                       
+
+      } catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+      } // end try
+	
+    if ($to == "A") {
+      mail($active, $subj, $body);
+    }	  
+	
+?>
+
+	   try 
+	   {
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003"); 
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+		$assigned = "";                   //  load up assigned members into $assigned string
+
+        $query = "SELECT facilityName, mbrID 
+						FROM assignment WHERE date = '$dateArray[$i]'
+                         ORDER BY facilityName";
+        
+        //first pass just gets the column names
+
+        $result = $con->query($query);
+        //return only the first row (we only need field names)
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        foreach ($row as $field => $value){
+        } // end foreach
+ 
+        //second pass gets the data
+        $data = $con->query($query);
+        $data->setFetchMode(PDO::FETCH_ASSOC);
+
+        foreach($data as $row){
+          foreach ($row as $name=>$value) {			  
+            $asigned .= $value . ",";
+			$assignments .= "$value ";
+          } // end field loop
+        } // end record loop
+		
+      } catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+      } // end try
+	  
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+		
+<?php
+	
+	try {
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+         $query = 'SELECT lowLeftPhoto, 
+                          lowLeftText,                        
+						  lowRightPhoto,
+						  lowRightText
+		          FROM    settings 
+				  WHERE   rcdNbr > 0  ';
+        
+        //first pass just gets the column names
+
+        $result = $con->query($query);
+        //return only the first row (we only need field names)
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        foreach ($row as $field => $value){
+        } // end foreach
+ 
+        //second query gets the data
+        $data = $con->query($query);
+        $data->setFetchMode(PDO::FETCH_ASSOC);		
+
+        foreach($data as $row){
+		       
+          $showLeagueText = '"' . ' ' . '"';
+          $showshowEventText = '"' . ' ' . '"';
+
+          foreach ($row as $name=>$value){              
+						
+			if ($name == 'lowLeftPhoto')    $leaguePhoto = $value;
+			if ($name == 'lowLeftText)      $leagueText =  $value;
+			if ($name == 'lowRightPhoto')   $eventPhoto =  $value;
+			if ($name == 'lowRightText')    $eventText =   $value;
+			
+          } // end field loop
+		  
+        } // end record loop
+
+    } catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+    } // end try
+	
+    if (filter_has_var(INPUT_POST, "eventPhoto"))
+	{
+        $eventPhoto = filter_input(INPUT_POST, "eventPhoto");
+
+		if (filter_has_var(INPUT_POST, "eventText"))
+			$eventText = filter_input(INPUT_POST, "eventText");
+		if (filter_has_var(INPUT_POST, "leaguePhoto"))
+			$leaguePhoto = filter_input(INPUT_POST, "leaguePhoto");
+		if (filter_has_var(INPUT_POST, "leagueText"))
+			$leagueText = filter_input(INPUT_POST, "leagueText");
+	  
+                                              // retrieve SQL record
+		try {
+        
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+                                                           // then update SQL record
+			
+	        $result = $con->prepare("UPDATE settings
+		                              SET lowLeftPhoto = '$leaguePhoto',
+					                      lowLeftText  = '$leagueText',
+					                      lowRightPhoto= '$eventPhoto',
+						                  lowRightText = '$eventText'
+					                  WHERE rcdNbr > 0 ");
+			$result->execute();
+					 
+        }		 //end of try
+ 	
+        catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+	    }
+		
+    } //end if
+
+?>
+	
+	<img src="court.jpg" alt= "court photo"/>
+	
+	<img src = "cody.jpg" alt= "restaurant photo"/>
+	
+	
+if ($leaguePeriodPosition = 0 ) {
+print <<<HERE
+    <style type = "text/css">            
+        .league  {
+		  background-color: lightyellow;
+		} 		  
+    </style>
+HERE;
+}
+
+  Look
+							"On a laptop this dialog box
+		                     can be repositioned.  Look
+							 over the displayed email carefully.
+							 Press OK to send the email." 
+	if ($emailOption == "Y") {
+        $test = filter_input(INPUT_POST, "dialogOK");
+        print "Test OK: $test ";		
+		if (filter_has_var(INPUT_POST, "dialogOK")) {
+			print "Got Here!";                                   //test
+//			 mail($to, $subj, $body, $headers);
+		}
+	}
+	
+	      $("#dialog").dialog({
+		  autoOpen : false,
+          buttons:[
+		  {
+            text: "OK",
+            name: "dialogOK",
+            type: "submit",
+            form: "dialog"
+          },
+		  {	
+            text: "Cancel",
+            click: function(){
+					$(this).dialog("close");
+			}
+		  }
+		  ],
+		  modal: true
+	   });
+    } // end 
+	
+	  $("form").dialog({
+		  click: function(){
+					form.submit();
+			       }
+	  });
+	  
+	  function(){
+					$(this).dialog("close");
+					
+					form.submit()
+					
+$("#dialog").dialog({
+		  autoOpen : false,
+          buttons:[
+		  {
+            text: "OK",
+            name: "dialogOK",
+            type: "submit",
+            form: "dialogOK",
+			click: function(){
+					$(this).dialog("close");	
+			       }                 			   
+          },
+		  {	
+            text: "Cancel",
+            click: function(){
+					$(this).dialog("close");
+				   }
+		  }
+		  ],
+		  modal: true
+	   });
+	   
+	<form action = "sendEmail.php" method = "post" name = "dialogOK">
+	<fieldset>
+	<input type = "text" id = "dialogOK" hidden name="dialogOK" />
+	</fieldset>
+	</form>
+	
+
+
+http://thevillages.asuscomm.com:8081/allamanda/members.php
+
+<span style='margin-left:6em'>
+
+<script type = "text/javascript">
+showDialog();
+</script>
+
+
+print "<p> email.php executed! </p> ";
+$fileConnected = fopen("test.txt", "w");          // this is a test
+
+			 if ($fileConnected == true) {
+				fwrite ($fileConnected, $to);
+				fclose($fileConnected);
+			 }
+			 
+			 
+
+
+
+
+	

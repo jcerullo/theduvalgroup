@@ -1,0 +1,217 @@
+<?php
+  session_start();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Duval</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+     integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="main.css">
+
+</head>
+<body>
+
+<?php
+  function init() {
+	global $mbrID;
+	global $isAdmin;
+	global $isMbr;
+	global $isActive;
+	global $password;
+	
+	$_SESSION["isAdmin"] = false; 
+	$_SESSION["status"] = ""; 
+	$_SESSION["isActive"] = false;
+	$isAdmin = $_SESSION["isAdmin"];  
+	$status = $_SESSION["status"];     
+	$isActive = $_SESSION["isActive"];	
+
+	if (isSet ($_SESSION["mbrID"])) {
+      $mbrID = $_SESSION["mbrID"];
+	  $password = $_SESSION["password"];
+	}
+	else {
+	  $_SESSION["mbrID"] = "anonymous";	
+	}  //end if
+		
+    if (filter_has_var(INPUT_POST, "mbrID")){
+      $mbrID = filter_input(INPUT_POST, "mbrID");	  
+      $_SESSION["mbrID"] = $mbrID;
+    }
+ 	
+    if (filter_has_var(INPUT_POST, "password")){
+      $password = filter_input(INPUT_POST, "password");	  
+      $_SESSION["password"] = $password; 
+    }
+		
+  }    //end function
+  
+  init();
+?>
+
+<header class="container">
+ <div class="row">
+  <h1 class="col-sm-4"></h1>
+    <nav class="col-sm-8 text-right">
+     <p><a href="index.php" role="button">Login</a></p>
+     <p><a href="mbrProfile.php" role="button">MemberProfile</a></p>
+     <p><a href="availability.php" role="button">Availability</a></p> 
+     <p><a href="assignments.php" role="button">CourtAssignments</a></p> 
+     <p><a href="members.php" role="button">Members</a></p> 
+     <p><a href="sendEmail.php" role="button">SendEmail</a></p>
+     <p><a href="help.php" role="button">Help</a></p>
+    </nav> 
+ </div>
+</header>
+
+<?php
+switch ($status) {
+case "A":	
+print <<<HERE
+<section class="jumbotron">
+  <div class="container">
+    <div class="row text-center">
+
+      <h2>The Duval Group</h2><br>
+      <h3>Moderated by James Lush and Dick Madler</h3><br>
+	
+      <form action="availability.php" method= "post">
+      <h4><input class="btn btn-primary" type = "text" 
+	                                     id = "mbrID"
+										 name = "mbrID"
+
+                                         value = '$mbrID' 
+
+										 placeholder="Member ID" 
+										 pattern="[A-Za-z]*"/></h4>										 
+      <h4><input class="btn btn-primary" type = "password" 
+	                                     id = "password" 
+										 name = "password"
+
+                                         value = '$password' 
+ 										 
+										 placeholder="Password"
+										 pattern="[A-Za-z]*"/></h4>
+	  <h4><input class="btn btn-primary" type="submit" value = "Continue"/></h4>
+	</form>
+	
+    </div>
+  </div>
+</section>
+HERE;
+break;
+
+case "I": 
+print <<<HERE
+<section class="jumbotron">
+  <div class="container">
+    <div class="row text-center">
+
+      <h2>The Duval Group</h2><br>
+      <h3>Moderated by James Lush and Dick Madler</h3><br>
+	
+      <form action="mbrProfile.php" method= "post">
+      <h4><input class="btn btn-primary" type = "text" 
+	                                     id = "mbrID"
+										 name = "mbrID"
+
+                                         value = '$mbrID' 
+
+										 placeholder="Member ID" 
+										 pattern="[A-Za-z]*"/></h4>										 
+      <h4><input class="btn btn-primary" type = "password" 
+	                                     id = "password" 
+										 name = "password"
+
+                                         value = '$password' 
+ 										 
+										 placeholder="Password"
+										 pattern="[A-Za-z]*"/></h4>
+	  <h4><input class="btn btn-primary" type="submit" value = "Continue"/></h4>
+	</form>
+	
+    </div>
+  </div>
+</section>
+HERE;
+break;
+default:
+print <<<HERE
+<section class="jumbotron">
+  <div class="container">
+    <div class="row text-center">
+
+      <h2>The Duval Group</h2><br>
+      <h3>Moderated by James Lush and Dick Madler</h3><br>
+	
+      <form action="" method= "post">
+      <h4><input class="btn btn-primary" type = "text" 
+	                                     id = "mbrID"
+										 name = "mbrID"
+
+                                         value = '$mbrID' 
+
+										 placeholder="Member ID" 
+										 pattern="[A-Za-z]*"/></h4>										 
+      <h4><input class="btn btn-primary" type = "password" 
+	                                     id = "password" 
+										 name = "password"
+
+                                         value = '$password' 
+ 										 
+										 placeholder="Password"
+										 pattern="[A-Za-z]*"/></h4>
+	  <h4><input class="btn btn-primary" type="submit" value = "Continue"/></h4>
+	</form>
+	
+    </div>
+  </div>
+</section>
+HERE;
+}
+?>
+
+<section class="container">
+ <div class="row">   
+   <figure class="col-sm-6">
+    <p>Enter your tennis availability dates before 6/30 </p>
+    <img src="court.jpg" alt= "court photo"/>
+    </figure>
+   
+    <figure class="col-sm-6">
+     <p>Next luncheon is scherduled for 7/15</p>
+     <img src = "cody.jpg" alt= "restaurant photo"/>
+    </figure> 
+ </div>
+</section>
+  
+  <footer class="container">
+  <div class="row">
+    <p class="col-sm-4">&copy; 2004 The Duval Group</p>
+    <ul class="col-sm-8">
+      
+      <li class="col-sm-1">
+       <img src="https://s3.amazonaws.com/codecademy-content/projects/make-a-website/lesson-4/twitter.svg">
+      </li>
+      
+     <li class="col-sm-1"> 
+       <img src="https://s3.amazonaws.com/codecademy-content/projects/make-a-website/lesson-4/facebook.svg">
+      </li>
+      
+     <li class="col-sm-1"> 
+       <img src="https://s3.amazonaws.com/codecademy-content/projects/make-a-website/lesson-4/instagram.svg">
+      </li>
+      
+     <li class="col-sm-1"> 
+       <img src="https://s3.amazonaws.com/codecademy-content/projects/make-a-website/lesson-4/medium.svg">
+      </li>
+      
+    </ul>
+  </div>
+  </footer>
+
+</body>
+</html>

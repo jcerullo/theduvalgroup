@@ -1,0 +1,247 @@
+<?php
+  session_start();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Duval</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script type = "text/javascript">
+      function validate(){ 
+        // get inputs
+        firstName = document.getElementById("txt_firstName").value;
+		lastName = document.getElementById("txt_lastName").value;
+        email = document.getElementById("txt_email").value;
+        phonePrimary = document.getElementById("txt_phonePrimary").value;
+		phoneSecondary = document.getElementById("txt_phoneSecondary").value;
+        //create an empty error message
+        errors = "";
+        //check first name - It simply needs to exist
+        if (firstName == ""){
+          errors += "please supply a first name \n";
+        } // end if
+		if (lastName == ""){
+          errors += "please supply a last name \n";
+        } // end if
+        //check email
+        emailRE = /^.+@.+\..{2,4}$/;
+        if (email.match(emailRE)){
+          //console.log("email match");
+          //do nothing.
+        } else {
+          //console.log("email not a match");
+          errors += "please check email address \n";
+        } // end if
+        //check phone number
+        phoneRE = /^\(\d{3}\) *\d{3}-\d{4}$/;
+        if (phonePrimary.match(phoneRE)){
+          //console.log("phone matches");
+          //do nothing
+        } else {
+          //console.log("phone problem");
+          errors += "please check primary phone #\n";
+        } // end primary phone if
+		if (phoneSecondary.match(phoneRE)){
+          //console.log("phone matches");
+          //do nothing
+        } else {
+          //console.log("phone problem");
+          errors += "please check secondary phone #\n";
+        } // end secondary phone if
+        //check for errors
+        if (errors == ""){
+          alert ("You're all set...data recorded");
+          //process the form
+        } else {
+          alert(errors);
+        } // end if
+      } // end function
+    </script>
+	
+</head>
+<body>
+
+<?php
+  function init() {
+	global $mbrID;
+	global $isAdmin;
+	global $isMbr;
+	global $isActive;
+	global $password;
+	global $firstName;
+    global $lastName;
+	global $phonePrimary;
+	global $phoneSecondary;
+	global $village;
+	global $streetAddr;
+	global $cityAddr;
+	global $zipAddr;
+	global $emailAddr;
+	global $status;
+	global $assignedTennisRanking;
+	global $mrbTennisRanking;
+	
+	$_SESSION["isAdmin"] = true;  // testing...this paragragh will be removed
+	$_SESSION["isMbr"] = true;
+	$_SESSION["isActive"] = true;
+	$isAdmin = $_SESSION["isAdmin"];  
+	$isMbr = $_SESSION["isMbr"];     
+	$isActive = $_SESSION["isActive"];  
+	
+	if (isSet ($_SESSION["mbrID"])) {
+      $mbrID = $_SESSION["mbrID"];
+	  $password = $_SESSION["password"];
+	  $firstName = $_SESSION["firstName"];
+	    // Set other globals: isMbr, isActive, isAdmin
+	}   // end if
+    else {
+      $_SESSION["mbrID"] = "";
+	  $_SESSION["password"] = "";
+      $mbrID = "";
+	  $password = "";
+    }  //end else		
+  }    //end init
+
+
+  init();
+                                                         // if form not yet displayed 
+	try {                                                // retrieve SQL record
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+        $result = $con->query("SELECT * FROM member WHERE mbrID = '$mbrID' ");
+		$result->setFetchMode(PDO::FETCH_ASSOC);
+
+		foreach ($result as $row) {
+		  foreach ($row as $name =>$value ) {            // populate form values for form display
+			if ($name == 'firstName')  $firstName = $value;
+			if ($name == 'lastName')   $lastName  = $value;
+			if ($name == 'phonePrimary')   $phonePrimary  = $value;
+			if ($name == 'phoneSecondary')   $phoneSecondary  = $value;
+			if ($name == 'village')   $village  = $value;
+			if ($name == 'streetAddr')   $streetAddr  = $value;
+			if ($name == 'cityAddr')   $cityAddr  = $value;
+			if ($name == 'zipAddr')   $zipAddr  = $value;
+			if ($name == 'emailAddr')   $emailAddr  = $value;
+			if ($name == 'status')   $status  = $value;
+			if ($name == 'password')   $password  = $value;
+			if ($name == 'tennisRanking')   $tennisRanking  = $value;
+		  }
+		 		  
+	    }        
+		
+    }		 //end of try
+ 	
+    catch(PDOException $e) {
+        echo 'ERROR: ' . $e->getMessage();
+    }	  
+?>  
+
+<header class="container">
+ <div class="row">
+  <h1 class="col-sm-4"></h1>
+    <nav class="col-sm-8 text-right">
+     <p><a href="indexProcess.php" role="button">Login</a></p>
+     <p><a href="mbrProfile.php" role="button">MemberProfile</a></p>
+     <p><a href="availability.php" role="button">Availability</a></p> 
+     <p><a href="assignments.php" role="button">CourtAssignments</a></p> 
+     <p><a href="members.php" role="button">Members</a></p> 
+     <p><a href="help.php" role="button">Help</a></p>
+    </nav>
+ </div>
+</header>
+
+<?php
+print "<p>...... You are logged in as <strong> $mbrID </strong> on the <strong>Member Profile </strong>  page</p>";
+print <<<HERE
+  <div class = "member"> 
+  <style type = "text/css">
+            fieldset {
+            width: 600px;
+            background-color: #eeeeee;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 5px 5px 5px gray;
+          }
+          label {
+            float: left;
+            clear: left;
+            width: 250px;
+            text-align: right;
+            padding-right: 1em;
+          }
+                   
+          input {
+            float: left;
+          }
+		  
+		  select {
+			  float:left;
+		  }
+          
+          :required {
+            border: 1px solid red;
+          }
+          
+          :invalid {
+            color: white;
+            background-color: red;
+          }
+          
+          button {
+			box-shadow: 3px 3px 3px gray;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            clear: both;
+          }
+		  
+  </style> 
+
+    <form action = "mbrProfileProcess.php" method = "post" >
+      <fieldset> <br>
+	  	<p> <strong>Starred items are required.  Don't forget to press Submit when done.</strong> </p>
+        <label>*First Name</label>
+        <input type="text" value="$firstName" id="txt_firstName" name="firstName" ><br>
+		<label>*Last Name</label>
+        <input type="text" value="$lastName" id="txt_lastName" name="lastName" > <br>
+        <label>*Email</label>
+        <input type="text" value="$emailAddr" id="txt_emailAddr" name="emailAddr" > <br>
+        <label>*Primary Phone Number (for tennis)<br>
+        (ddd) ddd-dddd</label>
+        <input type="text" value="$phonePrimary" id="txt_phonePrimary" name="phonePrimary" > <br>
+		<label> Secondary Phone Number (for emergency)</label><br>
+        <input type="text" value="$phoneSecondary" id="txt_phoneSecondary" name="phoneSecondary" > <br>
+		<label>Village</label>
+        <input type="text" value="$village" id="txt_village" name="village" > <br>
+		<label>Street Address</label>
+        <input type="text" value="$streetAddr" id="txt_streetAddr" name="streetAddr" > <br>
+		<label>City</label>
+        <input type="text" value="$cityAddr" id="txt_cityAddr" name="cityAddr" > <br>
+		<label>Zip</label>
+        <input type="text" value="$zipAddr" id="txt_zipAddr" name="zipAddr" > <br>
+		<label>*Status</label>
+		<select status = "selStatus">
+		  <option value = "I">Inactive</option>
+          <option value = "A">Active</option>		
+		  <option value = "D">Deleted</option>
+		</select> <br>
+		<label>*Password</label>
+        <input type="text" value="$password" id="txt_password" name="password" > <br>
+		<label>Tennis Ranking (ok to guess)</label>
+        <input type="text" value="$tennisRanking" id="txt_tennisRanking" name="tennisRanking" > <br><br>				
+        <input type="submit" value = "submit"/>
+
+      </fieldset>
+    </form>
+
+  </div>
+HERE;
+
+?>
+</body>
+</html> 

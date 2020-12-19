@@ -1,0 +1,293 @@
+<?php
+  session_start();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Duval</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+     integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="main.css">
+  
+  <link rel = "stylesheet"
+        type = "text/css" href="jquery-ui-1.10.3.custom.css" />
+  <link rel = "stylesheet"
+        type = "text/css" href="jquery-ui.multidatespicker.css" /> 
+		
+  <script type = "text/javascript"
+          src = "jquery-1.9.1.js"></script>
+  <script type = "text/javascript"
+          src = "jquery-ui-1.10.3.custom.min.js"></script>
+  <script type = "text/javascript"
+          src = "jquery-ui.multidatespicker.js"></script>
+  
+  <script type = "text/javascript">
+  
+
+    $(init);
+	
+    function init(){
+      $("h1").addClass("ui-widget-header");
+      $("#tabs").tabs();
+
+    var date = new Date();                      // set minDate to the first day of the folowing month
+
+	var daysInMonth = new Array(12);
+	  daysInMonth[0] = 31;
+	  daysInMonth[1] = 28;
+	  daysInMonth[2] = 31;
+	  daysInMonth[3] = 30;
+	  daysInMonth[4] = 31;
+	  daysInMonth[5] = 30;
+	  daysInMonth[6] = 31;
+	  daysInMonth[7] = 31;
+	  daysInMonth[8] = 30;
+	  daysInMonth[9] = 31;
+	  daysInMonth[10] = 30;
+	  daysInMonth[11] = 31;
+	  
+	  currentMonth = date.getMonth();                       //0-11
+	  firstDate = daysInMonth[currentMonth] +1;        //first date to display from today
+      $('#datePicker').multiDatesPicker({
+	               minDate: firstDate-date.getDate(), 
+	               maxDate: 71 });
+				   
+      $("#slider").slider()
+      .bind("slide", reportSlider);
+      $("#selectable").selectable();
+      $("#sortable").sortable();
+      $("#dialog").dialog();
+      //initially close dialog
+      $("#dialog").dialog("close");
+    } // end init
+  
+  </script>
+  
+</head>
+<body>
+
+<?php
+  function init() {
+	global $mbrID;
+	global $isAdmin;
+	global $isMbr;
+	global $password;
+	global $test;
+	
+	$test = "ok";                                           //test
+	
+	if (isSet ($_SESSION["mbrID"])) {
+      $mbrID = $_SESSION["mbrID"];
+	  $password = $_SESSION["password"];
+	}  //end if
+    else {
+      $_SESSION["mbrID"] = "";
+	  $_SESSION["password"] = "";
+      $mbrID = "";
+	  $password = "";
+    }  //end else	  
+  }    //end function init
+  
+    init();
+	
+?>
+
+<header class="container">
+ <div class="row">
+  <h1 class="col-sm-4"></h1>
+    <nav class="col-sm-8 text-right">
+     <p><a href="index.html" role="button">Login</a></p>
+     <p><a href="mbrProfile.php" role="button">MemberProfile</a></p>
+     <p><a href="availability.php" role="button">Availability</a></p> 
+     <p><a href="assignments.html" role="button">CourtAssignments</a></p> 
+     <p><a href="members.php" role="button">Members</a></p> 
+     <p><a href="sendEmail.php" role="button">SendEmail</a></p>
+     <p><a href="help.php" role="button">Help</a></p>
+    </nav> 
+ </div>
+</header>
+
+<?php
+print <<<HERE
+  <div class = "member"> 
+  <style type = "text/css">
+            fieldset {
+            width: 600px;
+            background-color: #eeeeee;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 5px 5px 5px gray;
+          }
+          label {
+            float: left;
+            clear: left;
+            width: 250px;
+            text-align: right;
+            padding-right: 1em;
+          }
+                   
+          input {
+            float: left;
+          }
+		  
+		  select {
+			  float:left;
+		  }
+          
+          :required {
+            border: 1px solid red;
+          }
+          
+          :invalid {
+            color: white;
+            background-color: red;
+          }
+          
+          button {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            clear: both;
+          }
+		  
+		  p {
+			margin-left: 100px;
+		  }
+  </style>
+    <h4> Note..Any club member can display the current court assignments. </h4>
+    <h4> Only a club administrator can add and remove a court assignment. </h4><br>
+	
+    <form action = "" method= "post">
+      <fieldset> <br>
+
+		<label>Date</label>
+        <input type = "text"
+             id = "datePicker" placeholder="*any" name="dates"/> <br> <br> 
+			 
+        <label>Action</label>
+        <select id="selAction" >
+		  <option value = "D">Display</option>
+		  <option value = "A" >Add</option>
+		  <option value = "R" >Remove</option>
+		</select>
+ 
+        <label>Court</label>
+        <select id="selCourt" > 
+		  <option value = "" selected disabled hidden>*any</option>
+		  <option value = "0">Sea Breeze</option>
+		  <option value = "1">Truman</option>
+		  <option value = "2">Odell</option>
+		  <option value = "3">Bacall</option>
+		  <option value = "4">Allamanda</option>
+		  <option value = "5">Colony Cottage</option>
+		</select>
+		
+		<label>Player</label>
+        <input type="text" id="txt_member" name="member" placeholder="*any"> <br>	
+		
+        <input type="submit" value = "submit"/> <br>
+      </fieldset>
+    </form>
+  </div>
+HERE;
+?>
+  <div id = "memberList"> 
+  <style type = "text/css">
+		  
+	#memberList {
+		margin: 100px;
+	}
+  </style>
+  
+	  <h2> Assignments go here </h2>  
+      <p>  
+<?php
+      try {
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $query = 'SELECT mbrID as "Member........", phonePrimary as "Phone" FROM member WHERE status = "A" ';
+        
+        //first pass just gets the column names
+        print "<table> \n";
+
+        $result = $con->query($query);
+        //return only the first row (we only need field names)
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        print "  <tr> \n";
+        foreach ($row as $field => $value){
+          print "    <th>$field</th> \n";
+        } // end foreach
+        print "  </tr> \n";
+ 
+        //second query gets the data
+        $data = $con->query($query);
+        $data->setFetchMode(PDO::FETCH_ASSOC);
+
+        foreach($data as $row){
+          print "  <tr> \n";
+          foreach ($row as $name=>$value){  
+            print "    <td>$value</td> \n";              
+          } // end field loop
+          print "  </tr> \n";
+        } // end record loop
+
+        print "</table> \n";
+
+      } catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+      } // end try
+
+?>
+  </p>  
+
+	
+	   <h2> The inactive Duval Group members are: </h2>
+       <p> 
+	   	   
+<?php
+      try {
+        $con= new PDO('mysql:host=localhost;dbname=duval', "root", "jjc003");
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $query = 'SELECT mbrID as "Member........", phonePrimary as "Phone" FROM member WHERE status = "I" ';
+        
+        //first pass just gets the column names
+        print "<table> \n";
+
+        $result = $con->query($query);
+        //return only the first row (we only need field names)
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        print "  <tr> \n";
+        foreach ($row as $field => $value){
+          print "    <th>$field</th> \n";
+        } // end foreach
+        print "  </tr> \n";
+ 
+        //second query gets the data
+        $data = $con->query($query);
+        $data->setFetchMode(PDO::FETCH_ASSOC);
+
+        foreach($data as $row){
+          print "  <tr> \n";
+          foreach ($row as $name=>$value){  
+            print "    <td>$value</td> \n";              
+          } // end field loop
+          print "  </tr> \n";
+        } // end record loop
+
+        print "</table> \n";
+
+      } catch(PDOException $e) {
+          echo 'ERROR: ' . $e->getMessage();
+      } // end try
+
+?>
+   </p>
+   </div>  
+</body>
+</html>
